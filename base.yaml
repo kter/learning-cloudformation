@@ -1,31 +1,31 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Resources:
-  FirstVPC:
+  InstantDevVPC:
     Type: AWS::EC2::VPC
     Properties:
-      CidrBlock: 10.0.0.0/16
+      CidrBlock: 172.16.31.0/16
       Tags:
       - Key: Name
-        Value: FirstVPC
+        Value: InstantDevVPC
   InternetGateway:
     Type: AWS::EC2::InternetGateway
     Properties:
       Tags:
       - Key: Name
-        Value: FirstVPC-IGW
+        Value: InstantDev-IGW
   AttachGateway:
     Type: AWS::EC2::VPCGatewayAttachment
     Properties:
-      VpcId: !Ref FirstVPC
+      VpcId: !Ref InstantDevVPC
       InternetGatewayId: !Ref InternetGateway
   FrontendRouteTable:
     Type: AWS::EC2::RouteTable
     DependsOn: AttachGateway
     Properties:
-      VpcId: !Ref FirstVPC
+      VpcId: !Ref InstantDevVPC
       Tags:
       - Key: Name
-        Value: FirstVPC-FrontendRoute
+        Value: InstantDev-FrontendRoute
   FrontendRoute:
     Type: AWS::EC2::Route
     DependsOn: AttachGateway
@@ -39,7 +39,7 @@ Resources:
     Properties:
       CidrBlock: 10.0.1.0/24
       MapPublicIpOnLaunch: 'true'
-      VpcId: !Ref FirstVPC
+      VpcId: !Ref InstantDevVPC
       Tags:
       - Key: Name
         Value: FirstVPC-FrontendSubnet
