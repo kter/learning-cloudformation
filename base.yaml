@@ -12,7 +12,7 @@ Resources:
     Properties:
       Tags:
       - Key: Name
-        Value: InstantDev-IGW
+        Value: InstantDevIGW
   AttachGateway:
     Type: AWS::EC2::VPCGatewayAttachment
     Properties:
@@ -25,7 +25,7 @@ Resources:
       VpcId: !Ref InstantDevVPC
       Tags:
       - Key: Name
-        Value: InstantDev-FrontendRoute
+        Value: InstantDevFrontendRoute
   FrontendRoute:
     Type: AWS::EC2::Route
     DependsOn: AttachGateway
@@ -42,7 +42,7 @@ Resources:
       VpcId: !Ref InstantDevVPC
       Tags:
       - Key: Name
-        Value: FirstVPC-FrontendSubnet
+        Value: InstantDevVPCFrontendSubnet
   FrontendSubnetRouteTableAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
