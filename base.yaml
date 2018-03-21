@@ -3,7 +3,7 @@ Resources:
   InstantDevVPC:
     Type: AWS::EC2::VPC
     Properties:
-      CidrBlock: 172.16.31.0/16
+      CidrBlock: 172.16.10.0/24
       Tags:
       - Key: Name
         Value: InstantDevVPC
@@ -37,7 +37,7 @@ Resources:
     Type: AWS::EC2::Subnet
     DependsOn: AttachGateway
     Properties:
-      CidrBlock: 10.0.1.0/24
+      CidrBlock: 172.16.10.0/24
       MapPublicIpOnLaunch: 'true'
       VpcId: !Ref InstantDevVPC
       Tags:
