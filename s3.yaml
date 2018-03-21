@@ -1,0 +1,48 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description:
+  S3 & VPC Endpoint create
+Parameters:
+  EnvType:
+    Description: Environment type.
+    Default: dev
+    Type: String
+    AllowedValues:
+      - dev
+      - mnt
+      - prd
+    ConstraintDescription: must specify dev or mnt or prd.
+  ProjectId:
+    Description: Project name id.
+    Type: String
+    MinLength: "3"
+    MaxLength: "3"
+    AllowedPattern: "[a-zA-Z0-9]*"
+    ConstraintDescription: must specify Project id.
+
+Resources:
+# Create S3 by log
+  LogS3:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      BucketName: !Join [ "-", [ "Ref":"EnvType" , "Ref":"ProjectId" ,"logbucket" ] ]
+      Tags:
+      - Key: Name
+        Value: !Join [ "-", [ "Ref":"EnvType" , "Ref":"ProjectId" ,"LogBucket" ] ]
+
+  LogS3Endpoint:
+    Type: "AWS::EC2::VPCEndpoint"
+    Properties:
+      RouteTableIds:
+        - { "Fn::ImportValue": !Join [ "-", [ "Ref":"EnvType", "Ref":"ProjectId", "PublicRouteTable"]] }
+        - { "Fn::ImportValue": !Join [ "-", [ "Ref":"EnvType", "Ref":"ProjectId", "PrivateRouteTable"]] }
+      ServiceName:
+        !Sub "com.amazonaws.${AWS::Region}.s3"
+      VpcId: { "Fn::ImportValue": !Join [ "-", [ "Ref":"EnvType", "Ref":"ProjectId" , "vpcid"]] }
+
+Outputs:
+  LogS3:
+    Description: Log S3 Bucket
+    Value: !Ref LogS3
+    Export:
+      Name: !Join [ "-", [ "Ref":"EnvType", "Ref":"ProjectId", "LogBucket"]]
+
