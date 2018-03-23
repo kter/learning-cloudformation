@@ -54,13 +54,43 @@ Resources:
     Properties:
       GroupDescription: default security group
       VpcId: !Ref InstantDevVPC
-  sgtesteringress:
-    Type: 'AWS::EC2::SecurityGroupIngress'
-    DependsOn: DefaultSecurityGroup
+      SecurityGroupIngress:
+        - IpProtocol: "-1"
+          CidrIp: 172.31.0.0/16
+          FromPort: '0'
+          ToPort: '65535'
+  #DefaultSecurityGroupIngress:
+  #  Type: 'AWS::EC2::SecurityGroupIngress'
+  #  DependsOn: DefaultSecurityGroup
+  #  Properties:
+  #    GroupId: !Ref DefaultSecurityGroup
+  #    IpProtocol: "-1"
+  #    FromPort: '0'
+  #    ToPort: '65535'
+  #    SourceSecurityGroupId: !Ref DefaultSecurityGroup
+  WebSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    DependsOn: InstantDevVPC
     Properties:
-      GroupId: !Ref DefaultSecurityGroup
-      IpProtocol: tcp
-      FromPort: '0'
-      ToPort: '65535'
-      SourceSecurityGroupId: !Ref DefaultSecurityGroup
-
+      GroupDescription: http and https
+      VpcId: !Ref InstantDevVPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          CidrIp: 0.0.0.0/0
+          FromPort: '80'
+          ToPort: '80'
+        - IpProtocol: tcp
+          CidrIp: 0.0.0.0/0
+          FromPort: '443'
+          ToPort: '443'
+  SshSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    DependsOn: InstantDevVPC
+    Properties:
+      GroupDescription: ssh
+      VpcId: !Ref InstantDevVPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          CidrIp: 8.8.8.8/32
+          FromPort: '22'
+          ToPort: '22'
