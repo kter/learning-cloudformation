@@ -1,0 +1,26 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  TableName:
+    Description: DynamoDB table name
+    Type: String
+    MinLength: '1'
+    MaxLength: '40'
+    Default: dynamodb_table_01
+Resources:
+  DynamoDB:
+    Type: "AWS::DynamoDB::Table"
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: "1"
+        WriteCapacityUnits: "1"
+      TableName: !Ref TableName
+      TimeToLiveSpecification:
+        AttributeName : "expires"
+        Enabled: true
+
