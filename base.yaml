@@ -63,20 +63,21 @@ Resources:
     Properties:
       GroupDescription: default security group
       VpcId: !Ref InstantDevVPC
+      # Other VPC
       SecurityGroupIngress:
         - IpProtocol: "-1"
           CidrIp: 172.31.0.0/16
           FromPort: '0'
           ToPort: '65535'
-  #DefaultSecurityGroupIngress:
-  #  Type: 'AWS::EC2::SecurityGroupIngress'
-  #  DependsOn: DefaultSecurityGroup
-  #  Properties:
-  #    GroupId: !Ref DefaultSecurityGroup
-  #    IpProtocol: "-1"
-  #    FromPort: '0'
-  #    ToPort: '65535'
-  #    SourceSecurityGroupId: !Ref DefaultSecurityGroup
+  DefaultSecurityGroupIngress:
+    Type: 'AWS::EC2::SecurityGroupIngress'
+    DependsOn: DefaultSecurityGroup
+    Properties:
+      GroupId: !Ref DefaultSecurityGroup
+      IpProtocol: "-1"
+      FromPort: '0'
+      ToPort: '65535'
+      SourceSecurityGroupId: !Ref DefaultSecurityGroup
   WebSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     DependsOn: InstantDevVPC
