@@ -48,12 +48,19 @@ Resources:
     Properties:
       SubnetId: !Ref FrontendSubnet
       RouteTableId: !Ref FrontendRouteTable
-  InstanceSecurityGroup:
+  DefaultSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
+    DependsOn: InstantDevVPC
     Properties:
-      GroupDescription: Enable SSH access via port 22
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: '22'
-          ToPort: '22'
-          CidrIp: !Ref InstanceSecurityGroup
+      GroupDescription: default security group
+      VpcId: !Ref InstantDevVPC
+  sgtesteringress:
+    Type: 'AWS::EC2::SecurityGroupIngress'
+    DependsOn: DefaultSecurityGroup
+    Properties:
+      GroupId: !Ref DefaultSecurityGroup
+      IpProtocol: tcp
+      FromPort: '0'
+      ToPort: '65535'
+      SourceSecurityGroupId: !Ref DefaultSecurityGroup
+
