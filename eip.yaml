@@ -12,9 +12,8 @@ Resources:
       #      InstanceId: !Ref Instance
 
 Outputs:
-  ElasticIP.AllocationId:
-    Value: !GetAtt 
-      - ElasticIP.AllocationId
+  ElasticIPAllocationId:
+    Value: !GetAtt ElasticIP.AllocationId
     Export:
       Name: !Sub '${AWS::StackName}-EIP'
 
