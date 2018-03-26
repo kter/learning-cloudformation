@@ -10,6 +10,15 @@ Resources:
       #    Properties: 
       #      AllocationId: !GetAtt ElasticIP.AllocationId
       #      InstanceId: !Ref Instance
+  DNSRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneName: kter.jp.
+      Name: dev.kter.jp
+      Type: A
+      TTL: '300'
+      ResourceRecords:
+        -  !Ref ElasticIP
 
 Outputs:
   ElasticIPAllocationId:
